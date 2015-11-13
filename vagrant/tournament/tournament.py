@@ -37,7 +37,6 @@ def countPlayers():
     c = conn.cursor()
     c.execute("SELECT count(*) as num FROM players")
     count = c.fetchone()
-    conn.commit()
     conn.close()
     return count[0]
 
@@ -73,9 +72,19 @@ def playerStandings():
     """
     conn = connect()
     c = conn.cursor()
-    c.execute("your query;")
-    conn.commit()
+    query = """SELECT p.id, p.name, count(m.winner) as wins, g.num 
+                FROM gameNmb AS g,players AS p
+                LEFT JOIN matches AS m
+                ON p.id = m.winner
+                WHERE p.id = g.id
+                GROUP BY p.id, p.name, g.num
+                ORDER BY wins, p.name"""
+    c.execute(query)
+    rankings = []
+    for row in c.fetchall():
+        rankings.append(row)
     conn.close()
+    return rankings
 
 
 def reportMatch(winner, loser):

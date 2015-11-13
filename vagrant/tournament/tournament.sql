@@ -13,3 +13,10 @@ CREATE TABLE matches(id SERIAL,
 					winner INTEGER,
 					player1 INTEGER,
 					player2 INTEGER);
+
+CREATE VIEW gameNmb AS 
+SELECT players.id, count(matches.*) AS num
+FROM players
+LEFT JOIN matches
+ON matches.player1 = players.id OR matches.player2 = players.id
+group by players.id;
