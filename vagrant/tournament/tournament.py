@@ -96,7 +96,8 @@ def reportMatch(winner, loser):
     """
     conn = connect()
     c = conn.cursor()
-    c.execute("your query;")
+    c.execute("""INSERT INTO matches (player1, player2, winner) 
+        VALUES (%s,%s, %s)""",(winner,loser,winner))
     conn.commit()
     conn.close()
  
@@ -116,10 +117,19 @@ def swissPairings():
         id2: the second player's unique id
         name2: the second player's name
     """
-    conn = connect()
-    c = conn.cursor()
-    c.execute("your query;")
-    conn.commit()
-    conn.close()
+    #Get players in ranked order from playerStandings function
+    rankings = playerStandings()
+    pairings = []
+    count = 0
+    
+    # Loop through query two at a time assigning 2 players to a tuple for a match
+    while(count < len(rankings)):
+        pairholder = (rankings[count][0],rankings[count][1],rankings[count + 1][0], 
+            rankings[count + 1][1])
+        pairings.append(pairholder)
+        count = count + 2
+
+    return pairings
+
 
 
