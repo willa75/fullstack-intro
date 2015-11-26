@@ -121,11 +121,11 @@ def swissPairings():
     rankings = playerStandings()
     pairings = []
     count = 0
-    
+
     # Loop through query two at a time assigning 2 players to a tuple for a match
     while(count < len(rankings)):
-        pairholder = (rankings[count][0],rankings[count][1],rankings[count + 1][0], 
-            rankings[count + 1][1])
+        pairholder = (rankings[count][0],rankings[count][1],
+            rankings[count + 1][0], rankings[count + 1][1])
         pairings.append(pairholder)
         count = count + 2
 
