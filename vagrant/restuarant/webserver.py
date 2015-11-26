@@ -2,7 +2,7 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import cgi
 
 class webserverHandler(BaseHTTPRequestHandler):
-	
+
 	def do_GET(self):
 		try:
 			if self.path.endswith("/hello"):
@@ -46,7 +46,7 @@ class webserverHandler(BaseHTTPRequestHandler):
 		try:
 			self.send_response(301)
 			self.send_header('Content-type', 'text/html')
-			self.send_headers()
+			self.end_headers()
 
 			ctype, pdict = cgi.parse_header(
 				self.headers.getheader('content-type'))
