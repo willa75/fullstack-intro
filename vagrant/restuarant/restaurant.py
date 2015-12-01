@@ -22,3 +22,16 @@ def addRestaurant(name):
 	newRestaurant = Restaurant(name=name)
 	session.add(newRestaurant)
 	session.commit()
+
+def getRestaurantName(restaurantID):
+	restaurant = session.query(Restaurant).filter_by(id = restaurantID).one()
+	return restaurant.name
+
+def updateRestaurantName(name,restaurantID):
+    print restaurantID
+    restaurant = session.query(Restaurant).filter_by(id = restaurantID).one()
+    print restaurant
+    if restaurant != []:
+        restaurant.name = name
+        session.add(restaurant)
+        session.commit()

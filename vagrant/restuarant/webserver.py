@@ -50,7 +50,8 @@ class webserverHandler(BaseHTTPRequestHandler):
 				restaurants = getRestaurants()
 				for restaurant in restaurants:
 					output += "<h2> %s </h2><br>" % restaurant.name
-					output += """<a href='#'>Edit</a><br>"""
+					output += """<a href='/restaurant/%s/edit'>Edit</a>
+					<br>""" % restaurant.id
 					output +="""<a href='#'>Delete</a><br><br>"""
 				
 				
@@ -70,6 +71,27 @@ class webserverHandler(BaseHTTPRequestHandler):
 				action='/restaurants/new'><h2>Make a New Restaurant</h2><input
 				type='text' name='restaurant'><input type='submit' 
 				value='submit'>"""
+				output += "</br><a href='/restaurants'>Cancel</a>"
+				
+				output += "</body></html>"
+				self.wfile.write(output)
+				print output
+				return
+			if self.path.endswith("/edit"):
+				self.send_response(200)
+				self.send_header('Content-type', 'text/html')
+				self.end_headers()
+
+				restaurantID = self.path.split("/")[2]
+				name = getRestaurantName(restaurantID)
+
+				output = ""
+				output += "<html><body>"
+				output += "<h1>Create a New Restaurant</h1>"
+				output += """<form method='POST' enctype='multipart/form-data'
+				action='/restaurant/%s/edit'><h2>Make a New Restaurant</h2><input
+				type='text' value = '%s'name='restaurant'><input type='submit' 
+				value='submit'>""" % (restaurantID , name)
 				output += "</br><a href='/restaurants'>Cancel</a>"
 				
 				output += "</body></html>"
@@ -98,6 +120,25 @@ class webserverHandler(BaseHTTPRequestHandler):
 
 			except:
 				pass
+		if self.path.endswith("/edit"):
+			try:
+				ctype, pdict = cgi.parse_header(
+					self.headers.getheader('content-type'))
+				if ctype == 'multipart/form-data':
+					fields=cgi.parse_multipart(self.rfile, pdict)
+					messagecontent = fields.get('restaurant')
+				
+				restaurantID = self.path.split("/")[2]
+				updateRestaurantName(messagecontent[0], restaurantID)
+
+				self.send_response(301)
+				self.send_header('Content-type', 'text/html')
+				self.send_header('Location', 'restaurants')
+				self.end_headers()
+
+			except:
+				pass
+
 		else:
 			try:
 				self.send_response(301)
