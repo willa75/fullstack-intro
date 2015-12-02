@@ -28,10 +28,14 @@ def getRestaurantName(restaurantID):
 	return restaurant.name
 
 def updateRestaurantName(name,restaurantID):
-    print restaurantID
     restaurant = session.query(Restaurant).filter_by(id = restaurantID).one()
-    print restaurant
     if restaurant != []:
         restaurant.name = name
         session.add(restaurant)
+        session.commit()
+
+def deleteRestaurant(restaurantID):
+    restaurant = session.query(Restaurant).filter_by(id = restaurantID).one()
+    if restaurant != []:
+        session.delete(restaurant)
         session.commit()
