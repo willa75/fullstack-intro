@@ -32,7 +32,7 @@ def newMenuItem(restaurant_id):
 		return redirect(url_for('restaurantMenu', restaurant_id = 
 			restaurant_id))
 	if request.method == 'GET':
-		render_template('newmenuitem.html', restaurant_id = restaurant_id)
+		return render_template('newmenuitem.html', restaurant_id = restaurant_id)
     
 
 # Task 2: Create route for editMenuItem function here
