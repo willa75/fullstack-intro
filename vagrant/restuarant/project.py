@@ -18,13 +18,21 @@ def restaurantMenu(restaurant_id):
     items = session.query(MenuItem).filter_by(restaurant_id=restaurant.id)
     return render_template('menu.html', restaurant=restaurant, items = items)
 
-#Making an API Endpoint (Get Request)
+#Making an API Endpoint to get list of menu items
 @app.route('/restaurants/<int:restaurant_id>/menu/JSON')
 def restaurantMenuJSON(restaurant_id):
     restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
     items = session.query(MenuItem).filter_by(restaurant_id= 
         restaurant_id).all()
     return jsonify(MenuItems=[i.serialize for i in items])
+
+#Making an API Endpoint to get one menu item
+@app.route('/restaurants/<int:restaurant_id>/menu/<int:menu_id>/JSON')
+def restaurantItemJSON(restaurant_id, menu_id):
+    restaurant = session.query(Restaurant).filter_by(id = restaurant_id).one()
+    item = session.query(MenuItem).filter_by(restaurant_id= 
+        restaurant_id, id = menu_id).one()
+    return jsonify(MenuItems=item.serialize)
 
 # Task 1: Create route for newMenuItem function here
 
