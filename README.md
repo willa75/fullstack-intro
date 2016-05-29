@@ -10,4 +10,5 @@ This is a project to create a database api for a Swiss system Tournament. Thes s
 2. Run `vagrant up`
 3. Run `vagrant ssh`
 4. Navigate to the **tournament** directory
-5. Run `python tournament_test.py` to run the test script.
+5. Run `psql -f tournament.sql` to create the db schema
+6. Run `python tournament_test.py` to run the test script.
