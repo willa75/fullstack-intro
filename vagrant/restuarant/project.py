@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
+from flask import Flask, render_template, request, redirect, url_for, flash, 
+    jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Restaurant, MenuItem
@@ -12,6 +13,55 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 @app.route('/')
+def restaurantList():
+    restaurants = session.query(Restaurant).all()
+    return render_template('index.html', restaurants = restaurants)
+
+#An API Endpoint to get a list of restaurants
+@app.route('/restaurants/JSON')
+def restaurantListJSON():
+    restaurants = session.query(Restaurant).all()
+    return jsonify(Restaurants =[i.serialize for i in restaurants])
+
+@app.route('/restaurants/new', methods=['GET', 'POST'])
+def newRestaurant():
+    if request.method == 'POST':
+        newrestaurant = Restaurant(name = request.form['name'])
+        session.add(newrestaurant)
+        session.commit()
+        flash("New restaurant has been added!")
+        return redirect(url_for('restaurantList'))
+    if request.method == 'GET':
+        return render_template('newrestaurant.html')
+
+#Delete restaurant and menu items associated with it
+@app.route('/restaurant/<int:restaurant_id>/delete', methods=['GET', 'POST'])
+def deleteRestaurant(restaurant_id):
+    restaurant = session.query(Restaurant).filter_by(id = restaurant_id)
+    if request.method == 'POST':
+        session.delete(restaurant)
+        session.commit()
+        flash("The restaurant has been successfully deleted!")
+        return redirect(url_for('restaurantList'))
+    if request.method == 'GET':
+        return render_template('deleterestaurant.html', restaurant = 
+            restaurant)
+
+#Edit name of restaurant
+@app.route('restaurant/<int:restaurant_id>/edit', methods=['GET', 'POST'])
+def editRestaurant(restaurant_id):
+    restaurant = session.query(Restaurant).filter_by(id = restaurant_id)
+    if request.method == 'POST':
+        if restaurant != []:
+            restaurant.name = request.form['name']
+            session.add(restaurant)
+            session.commit()
+            flash("Your message has been edited successfully!")
+            return redirect(url_for('restaurantList'))
+    if request.method == 'GET':
+        return render_template('restaurantedit.html', restaurant = restaurant)
+
+#Display the menu items of a restaurant
 @app.route('/restaurants/<int:restaurant_id>/')
 def restaurantMenu(restaurant_id):
     restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
