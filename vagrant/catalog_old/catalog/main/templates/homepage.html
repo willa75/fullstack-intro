@@ -1,0 +1,12 @@
+{% extends "main.html" %}
+{% block content %}
+<div>
+	{% if items	 %}
+	<ul>
+		{% for item in items %}
+			<li>{{ item.name }}</li>
+		{% endfor %}
+	</ul>
+	{% endif %}
+</div>
+{% endblock %}

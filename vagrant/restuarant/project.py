@@ -1,5 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, 
-    jsonify
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Restaurant, MenuItem
@@ -48,7 +47,7 @@ def deleteRestaurant(restaurant_id):
             restaurant)
 
 #Edit name of restaurant
-@app.route('restaurant/<int:restaurant_id>/edit', methods=['GET', 'POST'])
+@app.route('/restaurant/<int:restaurant_id>/edit', methods=['GET', 'POST'])
 def editRestaurant(restaurant_id):
     restaurant = session.query(Restaurant).filter_by(id = restaurant_id)
     if request.method == 'POST':
