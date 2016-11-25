@@ -1,31 +1,52 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
-# from sqlalchemy import Column, Integer, String
-# from app import db
-
-engine = create_engine('sqlite:///database.db', echo=True)
-db_session = scoped_session(sessionmaker(autocommit=False,
-                                         autoflush=False,
-                                         bind=engine))
+from sqlalchemy.orm import relationship
+from sqlalchemy import create_engine
+ 
 Base = declarative_base()
-Base.query = db_session.query_property()
 
-# Set your classes here.
+class Restaurant(Base):
+    __tablename__ = 'restaurant'
+   
+    id = Column(Integer, primary_key=True)
+    name = Column(String(250), nullable=False)
+    menuItems = relationship("MenuItem", cascade="all, delete-orphan")
 
-'''
-class User(Base):
-    __tablename__ = 'Users'
+    @property
+    def serialize(self):
+       """Return object data in easily serializeable format"""
+       return {
+           'name'         : self.name,
+           'id'           : self.id,
+       }
+ 
+class MenuItem(Base):
+    __tablename__ = 'menu_item'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), unique=True)
-    email = db.Column(db.String(120), unique=True)
-    password = db.Column(db.String(30))
 
-    def __init__(self, name=None, password=None):
-        self.name = name
-        self.password = password
-'''
+    name =Column(String(80), nullable = False)
+    id = Column(Integer, primary_key = True)
+    description = Column(String(250))
+    price = Column(String(8))
+    course = Column(String(250))
+    restaurant_id = Column(Integer,ForeignKey('restaurant.id'))
+    restaurant = relationship(Restaurant)
 
-# Create tables.
-Base.metadata.create_all(bind=engine)
+
+    @property
+    def serialize(self):
+       """Return object data in easily serializeable format"""
+       return {
+           'name'         : self.name,
+           'description'         : self.description,
+           'id'         : self.id,
+           'price'         : self.price,
+           'course'         : self.course,
+       }
+
+
+
+engine = create_engine('sqlite:///restaurantmenu.db')
+ 
+
+Base.metadata.create_all(engine)
