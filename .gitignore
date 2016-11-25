@@ -1,1 +1,5 @@
 *.pyc
+vagrant/catalog/catalog/instance
+.DS_Store
+env
+venv

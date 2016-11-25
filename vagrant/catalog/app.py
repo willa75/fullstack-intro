@@ -2,11 +2,13 @@
 # Imports
 #----------------------------------------------------------------------------#
 
-from flask import Flask, render_template, request
-# from flask.ext.sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, redirect, request, flash, url_for
+from sqlalchemy import create_engine, asc
+from sqlalchemy.orm import sessionmaker
 import logging
 from logging import Formatter, FileHandler
 from forms import *
+from models import Base, Restaurant, MenuItem
 import os
 
 #----------------------------------------------------------------------------#
@@ -15,7 +17,12 @@ import os
 
 app = Flask(__name__)
 app.config.from_object('config')
-#db = SQLAlchemy(app)
+
+engine = create_engine('sqlite:///restaurantmenu.db')
+Base.metadata.bind = engine
+
+DBSession = sessionmaker(bind=engine)
+session = DBSession()
 
 # Automatically tear down SQLAlchemy.
 '''
@@ -43,7 +50,9 @@ def login_required(test):
 
 @app.route('/')
 def home():
-    return render_template('pages/placeholder.home.html')
+    restaurants = session.query(Restaurant).order_by(asc(Restaurant.name))
+    return render_template('pages/placeholder.home.html', 
+        restaurants = restaurants)
 
 
 @app.route('/about')
@@ -62,11 +71,18 @@ def register():
     form = RegisterForm(request.form)
     return render_template('forms/register.html', form=form)
 
-
-@app.route('/forgot')
-def forgot():
-    form = ForgotForm(request.form)
-    return render_template('forms/forgot.html', form=form)
+@app.route('/create-restaurant', methods=['GET', 'POST'])
+def create_restaurant():
+    if request.method == 'GET':
+        form = RestaurantForm(request.form)
+        return render_template('forms/new-restaurant.html', form=form)
+    else:
+        newRestaurant = Restaurant(name = request.form['name'])
+        session.add(newRestaurant)
+        session.commit()
+        flash('The restaurant "%s" has been added' % request.form['name'],
+         'success')
+        return redirect(url_for('home'))
 
 # Error handlers.
 
@@ -84,7 +100,9 @@ def not_found_error(error):
 if not app.debug:
     file_handler = FileHandler('error.log')
     file_handler.setFormatter(
-        Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]')
+        Formatter(
+            '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
+        )
     )
     app.logger.setLevel(logging.INFO)
     file_handler.setLevel(logging.INFO)

@@ -3,8 +3,17 @@
 {% block content %}
 
 <div class="page-header">
-  <h1>Sticky footer with fixed navbar</h1>
+  <h1>Check Out These Amazing Restaurants:</h1>
 </div>
-<p class="lead">Pin a fixed-height footer to the bottom of the viewport in desktop browsers with this custom HTML and CSS. A fixed navbar has been added within <code>#wrap</code> with <code>padding-top: 60px;</code> on the <code>.container</code>.</p>
-
+{% for restaurant in restaurants %}
+	<a href = "">
+		<div class="row">
+			<div class="col-md-1"></div>
+				<div class="col-md-10 restaurant-list">
+					<h3>{{restaurant.name}}</h3>
+				</div>
+			<div class="col-md-1"></div>
+		</div>
+	</a>
+{% endfor %}
 {% endblock %}
