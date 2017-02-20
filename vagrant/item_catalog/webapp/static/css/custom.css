@@ -1,0 +1,103 @@
+.panel-shadow {
+    box-shadow: rgba(0, 0, 0, 0.3) 7px 7px 7px;
+}
+.panel-white {
+  border: 1px solid #dddddd;
+}
+.panel-white  .panel-heading {
+  color: #333;
+  background-color: #fff;
+  border-color: #ddd;
+}
+.panel-white  .panel-footer {
+  background-color: #fff;
+  border-color: #ddd;
+}
+
+.item .item-heading {
+  height: 95px;
+  padding: 20px 15px;
+}
+.item .item-heading .avatar {
+  width: 60px;
+  height: 60px;
+  display: block;
+  margin-right: 15px;
+}
+.item .item-heading .meta .title {
+  margin-bottom: 0;
+}
+.item .item-heading .meta .title a {
+  color: black;
+}
+.item .item-heading .meta .title a:hover {
+  color: #aaaaaa;
+}
+.item .item-heading .meta .time {
+  margin-top: 8px;
+  color: #999;
+}
+.item .item-image .image {
+  width: 100%;
+  height: auto;
+}
+.item .item-description {
+  padding: 15px;
+}
+.item .item-description p {
+  font-size: 14px;
+}
+.item .item-description .stats {
+  margin-top: 20px;
+}
+.item .item-description .stats .stat-item {
+  display: inline-block;
+  margin-right: 15px;
+}
+.item .item-description .stats .stat-item .icon {
+  margin-right: 8px;
+}
+.item .item-footer {
+  border-top: 1px solid #ddd;
+  padding: 15px;
+}
+.item .item-footer .input-group-addon a {
+  color: #454545;
+}
+.item .item-footer .comments-list {
+  padding: 0;
+  margin-top: 20px;
+  list-style-type: none;
+}
+.item .item-footer .comments-list .comment {
+  display: block;
+  width: 100%;
+  margin: 20px 0;
+}
+.item .item-footer .comments-list .comment .avatar {
+  width: 35px;
+  height: 35px;
+}
+.item .item-footer .comments-list .comment .comment-heading {
+  display: block;
+  width: 100%;
+}
+.item .item-footer .comments-list .comment .comment-heading .user {
+  font-size: 14px;
+  font-weight: bold;
+  display: inline;
+  margin-top: 0;
+  margin-right: 10px;
+}
+.item .item-footer .comments-list .comment .comment-heading .time {
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 0;
+  display: inline;
+}
+.item .item-footer .comments-list .comment .comment-body {
+  margin-left: 50px;
+}
+.item .item-footer .comments-list .comment > .comments-list {
+  margin-left: 50px;
+}
